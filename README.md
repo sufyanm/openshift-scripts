@@ -11,8 +11,8 @@
 
 ## Known Issues
 
-* etcd image had to be manually pulled: `docker pull quay.io/coreos/etcd:v3.2.22`
-* openshift-ansible playbooks do not currently work with Ansible 2.7. Use Ansible 2.6.5.
+* The openshift-ansible playbooks do not currently work with Ansible 2.7. Use Ansible 2.6.5.
+* References to the master in `/etc/hosts` (i.e. `::1 master.example.com master`) causes issues connecting to etcd running on the same machine.
 
 ## Adding Users
 
