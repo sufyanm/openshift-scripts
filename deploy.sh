@@ -6,7 +6,8 @@ yum -y update
 # Install Ansible 2.6.5
 yum -y install epel-release
 sed -i -e 's/^enabled=1/enabled=0/' /etc/yum.repos.d/epel.repo
-yum -y --enablerepo=epel install python-pip python-devel python ansible pyOpenSSL
+yum -y --enablerepo=epel install python-pip python-devel python pyOpenSSL
+yum -y install ansible # ansible==2.4.2
 pip install --upgrade ansible==2.6.5
 
 # Clone openshift-ansible repo
