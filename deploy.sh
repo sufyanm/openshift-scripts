@@ -1,15 +1,13 @@
 #!/bin/bash
 
+# Update system
 yum -y update
 
-# Install required packages
-yum -y install wget git net-tools bind-utils yum-utils iptables-services \
-  bridge-utils bash-completion kexec-tools sos psacct docker
-
-# Install Ansible 2.4.3.0 or newer
+# Install Ansible 2.6.5
 yum -y install epel-release
 sed -i -e 's/^enabled=1/enabled=0/' /etc/yum.repos.d/epel.repo
-yum -y --enablerepo=epel install ansible pyOpenSSL
+yum -y --enablerepo=epel install python-pip python-devel python pyOpenSSL
+pip install ansible==2.6.5
 
 # Clone openshift-ansible repo
 git clone https://github.com/openshift/openshift-ansible ~/openshift-ansible
