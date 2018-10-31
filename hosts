@@ -4,25 +4,52 @@ nodes
 etcd
 
 [OSEv3:vars]
-ansible_user=sufyanm
-ansible_become=yes
+ansible_user=root
+#ansible_become=true
+
+# Deployment type
 openshift_deployment_type=origin
-openshift_master_default_subdomain=apps.sufyanm.com
-openshift_disable_check=disk_availability,memory_availability
+#openshift_deployment_type=openshift-enterprise
+
+# Disable disk, memory checks
+#openshift_disable_check=disk_availability,memory_availability
+
+# Default subdomain; add a DNS record for *.apps.example.com
+openshift_master_default_subdomain=apps.example.com
+
+# HTPasswdPasswordIdentityProvider
 openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider'}]
 
-openshift_node_groups=[{'name': 'node-config-all-in-one', 'labels': ['node-role.kubernetes.io/master=true', 'node-role.kubernetes.io/infra=true', 'node-role.kubernetes.io/compute=true']}]
+# LDAPPasswordIdentityProvider
+#openshift_master_identity_providers=[{'name': 'ldap_auth', 'challenge': 'true', 'login': 'true', 'kind': 'LDAPPasswordIdentityProvider', 'attributes': {'id': ['dn'], 'email': ['mail'], 'name': ['cn'], 'preferredUsername': ['uid']}, 'bindDN': '', 'bindPassword': '', 'insecure': 'false', 'url': 'ldap://ldap.example.com:389/ou=users,dc=example,dc=com?uid'}]
+#openshift_master_ldap_ca_file=ldap-ca.crt
+
+# Router certificate
+#openshift_hosted_router_certificate={"certfile": "router.crt", "keyfile": "router.key", "cafile": "router-ca.crt"}
+
+# Deploy metrics; Ensure java-1.8.0-openjdk-headless is installed on the control node
+#openshift_metrics_install_metrics=true
+# https://github.com/openshift/origin-metrics/issues/429
+#openshift_metrics_cassandra_image="docker.io/openshift/origin-metrics-cassandra:v3.11.0"
+#openshift_metrics_hawkular_metrics_image="docker.io/openshift/origin-metrics-hawkular-metrics:v3.11.0"
+#openshift_metrics_heapster_image="docker.io/openshift/origin-metrics-heapster:v3.11.0"
+# https://github.com/openshift/origin-metrics/issues/429#issuecomment-417124646
+#openshift_metrics_schema_installer_image="docker.io/alv91/origin-metrics-schema-installer:v3.10.0"
+
+# Provide local certificate paths which will be deployed to masters
+#openshift_master_overwrite_named_certificates=true
+#openshift_master_named_certificates=[{"certfile": "master.crt", "keyfile": "master.key", "cafile": "master-ca.crt"}]
+
+# Add a trusted CA to all pods
+#openshift_additional_ca=ca-bundle.crt
 
 [masters]
-openshift.sufyanm.com
+master1.okd.example.com
 
 [etcd]
-openshift.sufyanm.com
+master1.okd.example.com
 
 [nodes]
-openshift.sufyanm.com openshift_node_group_name='node-config-all-in-one'
-
-#allinone.example.com openshift_node_group_name='node-config-all-in-one'
-#master.example.com openshift_node_group_name='node-config-master'
-#compute.example.com openshift_node_group_name='node-config-compute'
-#infra.example.com openshift_node_group_name='node-config-infra'
+master1.okd.example.com openshift_node_group_name='node-config-master'
+compute1.okd.example.com openshift_node_group_name='node-config-compute'
+infra1.okd.example.com openshift_node_group_name='node-config-infra'
